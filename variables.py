@@ -1,0 +1,17 @@
+scale=1
+x2=640*scale
+y2=345*scale
+density=0.01
+mode="reflect"
+screen_radius=(y2**2+x2**2)**(1/2)
+dt=0.001
+DELAY=1
+play_speed=1
+t=dt*play_speed
+radius=scale*10
+color_mode="normal"
+speed_constant=0.5
+radius_range=[20]
+color_change_rate=0.01
+bgcolor=[0,0,0]
+collision_mode=1
