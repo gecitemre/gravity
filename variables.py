@@ -15,3 +15,4 @@ radius_range=[20]
 color_change_rate=0.01
 bgcolor=[0,0,0]
 collision_mode=1
+G=6.67430*10**-11
