@@ -26,7 +26,7 @@ def universe():
     return planets
 def callback():
     global canvas,DELAY,now_b,now_c,double_click,pressed_r,pressed
-    if flag: move_shapes(universe(),canvas,my_shapes)
+    move_shapes(universe(),canvas,my_shapes)
     now_b=time()
     if now_c :
         if type(pressed)==int:
@@ -89,10 +89,6 @@ def br3(event):
     global pressed3
     pressed3=False
 
-def bp2(event):
-    global flag
-    flag=True
-
 planets=create_universe(0)
 tk = Tk()
 tk.title('Gravity Simulator')
@@ -102,7 +98,6 @@ canvas.bind('<ButtonPress-1>',lcp)
 canvas.bind('<ButtonRelease-1>',lcr)
 canvas.bind('<Motion>', motion)
 canvas.bind('<MouseWheel>',wheel)
-canvas.bind('<ButtonPress-2>',bp2)
 canvas.bind('<ButtonPress-3>',bp3)
 canvas.bind('<ButtonRelease-3>',br3)
 canvas.pack()
