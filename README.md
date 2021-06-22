@@ -18,7 +18,7 @@ There are some modes that can be changed inside variables.py:
 
 "color_mode"s: "random", "normal"
 
-"collision_mode"s: 1, 2 (1 is not realistic but stable; 2 is the implementation of the real collision formulas, but buggy)
+"collision_mode"s: 1, 2 (1 is not does not completely reflect real world physics formulas, but stable; 2 is the implementation of the real collision formulas, but buggy)
 
 Contact: emregecit5@gmail.com
 
