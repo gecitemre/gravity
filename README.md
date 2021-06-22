@@ -9,4 +9,4 @@ to run the simulator, run main.py with python.exe
 
 contact: emregecit5@gmail.com
 
-i am not satisfied with the collision system. if you have a better collision mechanism, please share it.
+i am not satisfied with the collision system. if you have a better collision mechanism, please contact me.
