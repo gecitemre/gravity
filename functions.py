@@ -37,7 +37,7 @@ def move_shapes(universe,canvas,my_shapes):
         redraw_shape(canvas, my_shapes[i], x, y, radius,color)
         i+=1
 def edge(planets):
-    if mode=="reflect":
+    if edge_mode=="reflect":
         for planet in planets:
             if planet.radius+planet.x>=(x2*2) and planet.vx>0:
                 if color_mode=="normal":
@@ -56,7 +56,7 @@ def edge(planets):
                     planet.color=[255,0,0]
                 planet.vy*=-1
         return planets
-    elif mode=="respawn":
+    elif edge_mode=="respawn":
         screen_radius=(x2**2+y2**2)**(1/2)
         for planet in planets:
             if pow(planet.x-x2,2)+pow(planet.y-y2,2)>screen_radius**2:
@@ -64,13 +64,6 @@ def edge(planets):
                 planet.y+=2*(y2-planet.y)
         return planets
 
-def respawn(planets):
-    screen_radius=(x2**2+y2**2)**(1/2)
-    for planet in planets:
-        if pow(planet.x-x2,2)+pow(planet.y-y2,2)>screen_radius**2:
-            planet.x+=2*(x2-planet.x)
-            planet.y+=2*(y2-planet.y)
-    return planets
 def change_color(planets):
     if color_mode=="normal":
         for planet in planets:
@@ -102,7 +95,7 @@ def create_universe(b4):
     planets=[]
     scXscale=scale*speed_constant
     i=0
-    if mode=="respawn":
+    if edge_mode=="respawn":
         screen_radius=(x2**2+y2**2)**(1/2)
         while i<b4:
             alpha=random()*2*pi
@@ -124,7 +117,7 @@ def create_universe(b4):
                 planets.append(new_planet)
                 i+=1
         return planets
-    elif mode=="reflect":
+    elif edge_mode=="reflect":
         while i<b4:
             radius=randrange(radius_range[0],radius_range[-1]+1)*scale
             y=scale*2*(random()*(y2-radius)+radius)

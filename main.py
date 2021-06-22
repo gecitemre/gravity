@@ -4,7 +4,7 @@ from time import time
 from functions import *
 from copy import deepcopy
 def universe():
-    global planets,time_,dt,mode
+    global planets
     time_=0
     while time_<1:
         for i in range(len(planets)):
@@ -25,16 +25,15 @@ def universe():
         time_+=dt
     return planets
 def callback():
-    global canvas,DELAY,now_b,now_c,double_click,pressed_r,pressed
+    global canvas,DELAY,now_b,now_c,pressed
     move_shapes(universe(),canvas,my_shapes)
     now_b=time()
     if now_c :
         if type(pressed)==int:
-            if flag:
-                planets[pressed].vx=planets[pressed].vy=0
-                planets[pressed].x=cursor_x*scale
-                planets[pressed].y=cursor_y*scale
-                redraw_shape(canvas,my_shapes[pressed],cursor_x,cursor_y,planets[pressed].radius,planets[pressed].color)
+            planets[pressed].vx=planets[pressed].vy=0
+            planets[pressed].x=cursor_x*scale
+            planets[pressed].y=cursor_y*scale
+            redraw_shape(canvas,my_shapes[pressed],cursor_x,cursor_y,planets[pressed].radius,planets[pressed].color)
         if pressed3:
             f=find(cursor_x,cursor_y,planets)
             if type(f)==int:
