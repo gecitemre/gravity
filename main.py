@@ -1,7 +1,6 @@
 from tkinter import Tk,Canvas
 from math import pi
 from time import time
-from constants import *
 from functions import *
 from copy import deepcopy
 def universe():
@@ -19,9 +18,7 @@ def universe():
                     if color_mode=="normal":
                         planet1.color=planet2.color=[255,0,0]
                     collision(planet1,planet2,d)
-                    gravity_inside(planet1,planet2)
-                else:
-                    acceleration(planet1,planet2)
+                acceleration(planet1,planet2)
             planets[i].move()
         planets=edge(planets)
         change_color(planets)
