@@ -1,8 +1,4 @@
-from tkinter import Tk,Canvas
-from math import pi
-from time import time
 from functions import *
-from copy import deepcopy
 def universe():
     global planets
     time_=0

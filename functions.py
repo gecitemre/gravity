@@ -1,5 +1,3 @@
-from random import random,choice,randrange
-from math import pi,sin,cos,sqrt
 from constants import *
 from variables import *
 class planet:
