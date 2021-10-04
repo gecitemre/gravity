@@ -148,16 +148,17 @@ def interact(planet1, planet2):
             2
             * numpy.matmul(planet1.velocity - planet2.velocity, vector12)
             * vector12
-            / (distance_squared * (planet1.mass + planet2.mass))
+            / distance_squared
+            / (planet1.mass + planet2.mass)
         )
         planet1.velocity -= planet2.mass * vector_a
         planet2.velocity += planet1.mass * vector_a
         planet1.color = planet2.color = COLLISION_COLOR.copy()
 
         # push away
-        vector_a = vector12 * real_distance / distance
-        planet1.coordinate += planet2.mass * vector_a / (planet1.mass + planet2.mass)
-        planet2.coordinate -= planet1.mass * vector_a / (planet1.mass + planet2.mass)
+        vector_a = vector12 * real_distance / distance / (planet1.mass + planet2.mass)
+        planet1.coordinate += planet2.mass * vector_a
+        planet2.coordinate -= planet1.mass * vector_a
 
     # gravitation
     # gravitational constant is ignored.
@@ -179,7 +180,8 @@ def interact_p(pressed_planet, planet):
                 2
                 * numpy.matmul(pressed_planet.velocity - planet.velocity, vector12)
                 * vector12
-                / (distance_squared * (pressed_planet.mass + planet.mass))
+                / distance_squared
+                / (pressed_planet.mass + planet.mass)
             )
             pressed_planet.velocity -= planet.mass * vector_a
             planet.velocity += pressed_planet.mass * vector_a
