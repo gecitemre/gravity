@@ -47,17 +47,6 @@ COLLISION_COLOR = numpy.array((255.0, 0.0, 0.0))
 cursor_coordinate = old_cursor_coordinate = get_cursor_coordinate()
 CENTER = numpy.array((SCREENWIDTH, SCREENHEIGHT)) * SCALE / 2
 
-"""@numba.experimental.jitclass(
-spec=[("coordinate",numba.float64[:]),
-      ("radius",numba.int64),
-      ("mass",numba.float64),
-      ("acceleration",numba.float64[:]),
-      ("velocity",numba.float64[:]),
-      ("color",numba.float64[:]),
-      ("ID",numba.int64)
-])"""
-
-
 class Planet:
     def __init__(
         self,
