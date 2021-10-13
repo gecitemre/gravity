@@ -9,7 +9,6 @@ from ctypes import windll, byref, Structure
 
 class POINT(Structure):
     from ctypes import c_long
-
     _fields_ = [("x", c_long), ("y", c_long)]
 
 
@@ -46,6 +45,7 @@ PLANET_COLOR = 255.0 * (128 * numpy.ones(3, dtype=int) > numpy.array(BG_COLOR))
 COLLISION_COLOR = numpy.array((255.0, 0.0, 0.0))
 cursor_coordinate = old_cursor_coordinate = get_cursor_coordinate()
 CENTER = numpy.array((SCREENWIDTH, SCREENHEIGHT)) * SCALE / 2
+
 
 class Planet:
     def __init__(
