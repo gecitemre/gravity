@@ -1,22 +1,10 @@
 from time import time
 from tkinter import Tk, Canvas
 import numpy
-from ctypes import windll, byref, Structure
+from pyautogui import position
 
 # from scipy.constants import gravitational_constant
 # gravitational constant is ignored.
-
-
-class POINT(Structure):
-    from ctypes import c_long
-    _fields_ = [("x", c_long), ("y", c_long)]
-
-
-def get_cursor_coordinate() -> numpy.ndarray:
-    point = POINT()
-    windll.user32.GetCursorPos(byref(point))
-    return numpy.array((point.x, point.y), dtype=float)
-
 
 pressed_planet = None
 bp3flag = False
@@ -43,7 +31,7 @@ with open("variables.txt", "r") as file:
 
 PLANET_COLOR = 255.0 * (128 * numpy.ones(3, dtype=int) > numpy.array(BG_COLOR))
 COLLISION_COLOR = numpy.array((255.0, 0.0, 0.0))
-cursor_coordinate = old_cursor_coordinate = get_cursor_coordinate()
+cursor_coordinate = old_cursor_coordinate = numpy.array(position())
 CENTER = numpy.array((SCREENWIDTH, SCREENHEIGHT)) * SCALE / 2
 
 
@@ -189,7 +177,7 @@ def interact_p(pressed_planet, planet):
 def callback():
     global pressed_planet, cursor_coordinate, before, now, old_cursor_coordinate, coordinate_difference
     old_cursor_coordinate = cursor_coordinate
-    cursor_coordinate = get_cursor_coordinate()
+    cursor_coordinate = numpy.array(position())
     before = now
     now = time() * 1000
     main()
@@ -274,7 +262,7 @@ def ButtonPress2(event):
 
 if EDGE_MODE == "reflect":
 
-    def create_universe() -> list[Planet]:
+    def create_universe() -> list:
         planets = []
         for _ in range(INITIAL_PLANETS):
             flag = True
