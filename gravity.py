@@ -32,7 +32,8 @@ with open("variables.txt", "r") as file:
 PLANET_COLOR = 255.0 * (128 * numpy.ones(3, dtype=int) > numpy.array(BG_COLOR))
 COLLISION_COLOR = numpy.array((255.0, 0.0, 0.0))
 cursor_coordinate = old_cursor_coordinate = numpy.array(position())
-CENTER = numpy.array((SCREENWIDTH, SCREENHEIGHT)) * SCALE / 2
+SIZE = numpy.array((SCREENWIDTH, SCREENHEIGHT))
+CENTER = SIZE * SCALE / 2
 
 
 class Planet:
@@ -297,7 +298,7 @@ if EDGE_MODE == "reflect":
         edge_matrix = numpy.vstack(
             (
                 planet.coordinate <= planet.radius,
-                planet.coordinate >= 2 * CENTER - planet.radius,
+                planet.coordinate >= SIZE - planet.radius,
             )
         )
         if edge_matrix.any():
@@ -308,7 +309,7 @@ if EDGE_MODE == "reflect":
                     numpy.vstack(
                         (
                             numpy.array((planet.radius, planet.radius)),
-                            2 * CENTER - planet.radius,
+                            SIZE - planet.radius,
                         )
                     )
                     - planet.coordinate
@@ -359,7 +360,7 @@ elif EDGE_MODE == "respawn":
 
     def edge(planet):
         if numpy.linalg.norm(planet.coordinate - CENTER) > numpy.linalg.norm(CENTER):
-            planet.coordinate = 2 * CENTER - planet.coordinate
+            planet.coordinate = SIZE - planet.coordinate
 
 
 tk.title("Gravity Simulator - Emre Geçit")
