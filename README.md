@@ -1,6 +1,6 @@
-https://youtu.be/aWpOb90gNvY
+#Gravity Simulator by Emre Geçit
 
-Gravity Simulator by Emre Geçit
+https://youtu.be/aWpOb90gNvY
 
 To run the simulator, run gravity.py with python.
 
