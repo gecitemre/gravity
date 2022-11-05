@@ -2,6 +2,7 @@ from time import time
 from tkinter import Tk, Canvas
 import numpy
 from pyautogui import position
+from variables import *
 
 # from scipy.constants import gravitational_constant
 # gravitational constant is ignored.
@@ -12,22 +13,6 @@ before = now = time()
 tk = Tk()
 SCREENWIDTH = tk.winfo_screenwidth()
 SCREENHEIGHT = tk.winfo_screenheight()
-
-with open("variables.txt", "r") as file:
-    dictionary = eval(file.read())
-    SCALE = dictionary["SCALE"]  # int|float
-    DENSITY = dictionary["DENSITY"]  # int|float
-    DT = dictionary["DT"]  # 0<float<=1
-    DELAY = dictionary["DELAY"]  # int
-    PLAY_SPEED = dictionary["PLAY_SPEED"]  # int|float
-    INITIAL_SPEED_CONSTANT = dictionary["INITIAL_SPEED_CONSTANT"]  # int|float
-    COLOR_CHANGE_RATE = dictionary["COLOR_CHANGE_RATE"]  # int
-    RADIUS_RANGE = dictionary["RADIUS_RANGE"]  # tuple[int|float,int|float]
-    FEED_SPEED = dictionary["FEED_SPEED"]  # int|float
-    EDGE_MODE = dictionary["EDGE_MODE"]  # "respawn"|"reflect"
-    BG_COLOR = dictionary["BG_COLOR"]  # tuple[int,int,int]
-    INITIAL_PLANETS = dictionary["INITIAL_PLANETS"]  # int
-    RADIUS_MIN = dictionary["RADIUS_MIN"]  # float
 
 PLANET_COLOR = 255.0 * (128 * numpy.ones(3, dtype=int) > numpy.array(BG_COLOR))
 COLLISION_COLOR = numpy.array((255.0, 0.0, 0.0))
