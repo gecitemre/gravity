@@ -1,3 +1,5 @@
+![CodeQL Badge](https://github.com/gecitemre/gravity/actions/workflows/pylint.yml/badge.svg)
+
 # Gravity Simulator
 
 https://youtu.be/aWpOb90gNvY
