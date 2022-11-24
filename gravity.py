@@ -137,7 +137,7 @@ def interact(planet1, planet2):
     planet2.acceleration -= vector_a / planet2.mass
 
 
-def interact_p(pressed_planet, planet):
+def interact_p(planet):
     vector21 = planet.coordinate - pressed_planet.coordinate
     distance_squared = sum(pow(vector21, 2))
     distance = numpy.sqrt(distance_squared)
