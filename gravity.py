@@ -6,11 +6,11 @@ Left click to create new planet, press to hold a planet, right click to delete p
 scroll when your cursor is on a planet to feed or shrink a planet.
 """
 
-from time import time
 from tkinter import Tk, Canvas
+from time import time
 import numpy
 from pyautogui import position
-from variables import *
+from config import *
 
 # from scipy.constants import gravitational_constant
 # gravitational constant is ignored.
@@ -81,8 +81,7 @@ def find_planet(coordinate: numpy.ndarray):
     for index, planet in enumerate(planets):
         if numpy.linalg.norm(coordinate - planet.coordinate) < planet.radius:
             return {"index": index, "planet": planet}
-    else:
-        return {"index": None, "planet": None}
+    return {"index": None, "planet": None}
 
 
 def main():
@@ -169,7 +168,7 @@ def interact_p(pressed_planet, planet):
 
 
 def callback():
-    global pressed_planet, cursor_coordinate, before, now, old_cursor_coordinate, coordinate_difference
+    global cursor_coordinate, before, now, old_cursor_coordinate, coordinate_difference, pressed_planet
     old_cursor_coordinate = cursor_coordinate
     cursor_coordinate = numpy.array(position())
     before = now
@@ -213,7 +212,7 @@ def ButtonPress1(event):
 
 
 def ButtonRelease1(event):
-    global pressed_planet, old_cursor_coordinate
+    global pressed_planet
     if pressed_planet:
         pressed_planet.velocity = (
             SCALE
@@ -257,19 +256,19 @@ def ButtonPress2(event):
 if EDGE_MODE == "reflect":
 
     def create_universe() -> list:
-        planets = []
+        planets_ = []
         for _ in range(INITIAL_PLANETS):
             flag = True
             while flag:
                 radius = numpy.random.uniform(RADIUS_RANGE[0], RADIUS_RANGE[1]) * SCALE
                 coordinate = numpy.random.uniform(high=2, size=2) * (CENTER - radius)
-                for planet in planets:
+                for planet in planets_:
                     if planet.radius + radius >= numpy.linalg.norm(
                         planet.coordinate - coordinate
                     ):
                         break
                 flag = False
-            planets.append(
+            planets_.append(
                 Planet(
                     coordinate,
                     numpy.random.uniform(high=INITIAL_SPEED_CONSTANT * SCALE, size=2),
@@ -284,7 +283,7 @@ if EDGE_MODE == "reflect":
                     ),
                 )
             )
-        return planets
+        return planets_
 
     def edge(planet):
         global coordinate_difference
@@ -317,7 +316,7 @@ if EDGE_MODE == "reflect":
 elif EDGE_MODE == "respawn":
 
     def create_universe() -> list[Planet]:
-        planets = []
+        planets_ = []
         for _ in range(INITIAL_PLANETS):
             flag = True
             while flag:
@@ -327,14 +326,14 @@ elif EDGE_MODE == "respawn":
                     numpy.array(numpy.cos(theta), numpy.sin(theta)) + CENTER
                 )
                 radius = numpy.random.uniform(RADIUS_RANGE[0], RADIUS_RANGE[1]) * SCALE
-                for planet in planets:
+                for planet in planets_:
                     if planet.radius + radius < numpy.linalg.norm(
                         planet.coordinate - coordinate
                     ):
                         break
                 flag = False
 
-            planets.append(
+            planets_.append(
                 Planet(
                     coordinate,
                     numpy.random.uniform(high=INITIAL_SPEED_CONSTANT * SCALE, size=2),
@@ -349,7 +348,7 @@ elif EDGE_MODE == "respawn":
                     ),
                 )
             )
-        return planets
+        return planets_
 
     def edge(planet):
         if numpy.linalg.norm(planet.coordinate - CENTER) > numpy.linalg.norm(CENTER):

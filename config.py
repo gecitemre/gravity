@@ -1,3 +1,4 @@
+"""Configurable variables for the application."""
 SCALE = 1
 DENSITY = 1
 DT = 0.1
