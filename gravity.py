@@ -1,3 +1,11 @@
+"""Gravity simulation.
+
+Run this script to start the simulation.
+
+Left click to create new planet, press to hold a planet, right click to delete planet,
+scroll when your cursor is on a planet to feed or shrink a planet.
+"""
+
 from time import time
 from tkinter import Tk, Canvas
 import numpy
