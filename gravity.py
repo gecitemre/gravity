@@ -89,7 +89,7 @@ def main():
         if pressed_planet:
             planets_iterate = planets[:pp_index] + planets[pp_index + 1 :]
             for i, planet1 in enumerate(planets_iterate):
-                interact_p(pressed_planet, planet1)
+                interact_p(planet1)
                 for planet2 in planets_iterate[i + 1 :]:
                     interact(planet1, planet2)
                 planet1.move()
