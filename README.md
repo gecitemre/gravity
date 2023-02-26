@@ -1,4 +1,3 @@
-![Pylint Badge](https://github.com/gecitemre/gravity/actions/workflows/pylint.yml/badge.svg)
 ![Python Application Badge](https://github.com/gecitemre/gravity/actions/workflows/python-app.yml/badge.svg)
 ![CodeQL Badge](https://github.com/gecitemre/gravity/actions/workflows/codeql.yml/badge.svg)
 
