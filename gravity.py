@@ -10,7 +10,7 @@ from tkinter import Tk, Canvas
 from time import time
 import numpy
 from pyautogui import position
-from config import *
+import config
 
 # from scipy.constants import gravitational_constant
 # gravitational constant is ignored.
@@ -22,14 +22,16 @@ tk = Tk()
 SCREENWIDTH = tk.winfo_screenwidth()
 SCREENHEIGHT = tk.winfo_screenheight()
 
-PLANET_COLOR = 255.0 * (128 * numpy.ones(3, dtype=int) > numpy.array(BG_COLOR))
+PLANET_COLOR = 255.0 * (128 * numpy.ones(3, dtype=int) > numpy.array(config.BG_COLOR))
 COLLISION_COLOR = numpy.array((255.0, 0.0, 0.0))
 cursor_coordinate = old_cursor_coordinate = numpy.array(position())
 SIZE = numpy.array((SCREENWIDTH, SCREENHEIGHT))
-CENTER = SIZE * SCALE / 2
+CENTER = SIZE * config.SCALE / 2
 
 
 class Planet:
+    """Planet class."""
+
     def __init__(
         self,
         coordinate,
@@ -38,7 +40,7 @@ class Planet:
         color=PLANET_COLOR.copy(),
         mass=1,
         radius=10,
-        ID=None,
+        planet_id=None,
     ):
         self.coordinate = coordinate
         self.radius = radius
@@ -46,35 +48,37 @@ class Planet:
         self.acceleration = acceleration
         self.velocity = velocity
         self.color = color
-        self.ID = ID
+        self.planet_id = planet_id
 
     def redraw(self):
         canvas.itemconfig(
-            self.ID,
+            self.planet_id,
             fill=rgb_color(self.color.astype(int)),
             outline=rgb_color(self.color.astype(int)),
         )
         canvas.coords(
-            self.ID,
+            self.planet_id,
             tuple(
                 numpy.hstack(
                     (self.coordinate - self.radius, self.coordinate + self.radius)
                 )
-                / SCALE
+                / config.SCALE
             ),
         )
 
     def move(self):
         self.coordinate += (
-            (self.velocity + self.acceleration * DT * PLAY_SPEED / 2) * DT * PLAY_SPEED
+            (self.velocity + self.acceleration * config.DT * config.PLAY_SPEED / 2)
+            * config.DT
+            * config.PLAY_SPEED
         )
-        self.velocity += self.acceleration * DT * PLAY_SPEED
+        self.velocity += self.acceleration * config.DT * config.PLAY_SPEED
         self.acceleration = numpy.zeros(2)
         edge(self)
 
 
 def rgb_color(rgb) -> str:
-    return f"#%02x%02x%02x" % (rgb[0], rgb[1], rgb[2])
+    return "#%02x%02x%02x" % (rgb[0], rgb[1], rgb[2])
 
 
 def find_planet(coordinate: numpy.ndarray):
@@ -85,7 +89,7 @@ def find_planet(coordinate: numpy.ndarray):
 
 
 def main():
-    for _ in range(int(1 / DT)):
+    for _ in range(int(1 / config.DT)):
         if pressed_planet:
             planets_iterate = planets[:pp_index] + planets[pp_index + 1 :]
             for i, planet1 in enumerate(planets_iterate):
@@ -102,7 +106,7 @@ def main():
                 planet1.move()
 
     for planet in planets:
-        planet.color += COLOR_CHANGE_RATE * (PLANET_COLOR - planet.color)
+        planet.color += config.COLOR_CHANGE_RATE * (PLANET_COLOR - planet.color)
         planet.redraw()
 
 
@@ -174,34 +178,42 @@ def callback():
     before = now
     now = time() * 1000
     main()
-    if pressed_planet != None:
+    if pressed_planet is not None:
         pressed_planet.velocity = numpy.zeros(2)
-        pressed_planet.coordinate = SCALE * cursor_coordinate + coordinate_difference
+        pressed_planet.coordinate = (
+            config.SCALE * cursor_coordinate + coordinate_difference
+        )
         pressed_planet.redraw()
 
     if bp3flag:
-        index, planet = find_planet(SCALE * cursor_coordinate).values()
-        if planet != None:
+        index, planet = find_planet(config.SCALE * cursor_coordinate).values()
+        if planet is not None:
             if pressed_planet == planet:
                 pressed_planet = None
-            canvas.delete(planet.ID)
+            canvas.delete(planet.planet_id)
             del planets[index]
-    canvas.after(DELAY, callback)
+    canvas.after(config.DELAY, callback)
 
 
 def ButtonPress1(event):
     global pressed_planet, coordinate_difference, pp_index
-    coordinate = SCALE * numpy.array((event.x, event.y), dtype=float)
+    coordinate = config.SCALE * numpy.array((event.x, event.y), dtype=float)
     pp_index, pressed_planet = find_planet(coordinate).values()
-    if pressed_planet == None:
+    if pressed_planet is None:
         coordinate_difference = numpy.zeros(2)
-        radius = numpy.random.uniform(RADIUS_RANGE[0], RADIUS_RANGE[1]) * SCALE
+        radius = (
+            numpy.random.uniform(config.RADIUS_RANGE[0], config.RADIUS_RANGE[1])
+            * config.SCALE
+        )
         pressed_planet = Planet(
             coordinate,
             radius=radius,
-            mass=4 / 3 * numpy.pi * DENSITY * radius ** 3,
-            ID=canvas.create_oval(
-                tuple(numpy.hstack((coordinate - radius, coordinate + radius)) / SCALE),
+            mass=4 / 3 * numpy.pi * config.DENSITY * radius**3,
+            planet_id=canvas.create_oval(
+                tuple(
+                    numpy.hstack((coordinate - radius, coordinate + radius))
+                    / config.SCALE
+                ),
                 fill=rgb_color(PLANET_COLOR.astype(int)),
             ),
         )
@@ -213,10 +225,10 @@ def ButtonPress1(event):
 
 def ButtonRelease1(event):
     global pressed_planet
-    if pressed_planet:
+    if pressed_planet is not None:
         pressed_planet.velocity = (
-            SCALE
-            / PLAY_SPEED
+            config.SCALE
+            / config.PLAY_SPEED
             * (numpy.array((event.x, event.y)) - old_cursor_coordinate)
             / (time() * 1000 - before)
         )
@@ -225,42 +237,45 @@ def ButtonRelease1(event):
 
 def MouseWheel(event):
     global pressed_planet
-    index, planet = find_planet(SCALE * numpy.array((event.x, event.y))).values()
-    if planet != None:
-        planet.radius += SCALE * event.delta * FEED_SPEED
-        if planet.radius <= SCALE * RADIUS_MIN:
-            canvas.delete(planet.ID)
+    index, planet = find_planet(config.SCALE * numpy.array((event.x, event.y))).values()
+    if planet is not None:
+        planet.radius += config.SCALE * event.delta * config.FEED_SPEED
+        if planet.radius <= config.SCALE * config.RADIUS_MIN:
+            canvas.delete(planet.planet_id)
             del planets[index]
             pressed_planet = None
         else:
-            planet.mass = 4 / 3 * numpy.pi * DENSITY * planet.radius ** 3
+            planet.mass = 4 / 3 * numpy.pi * config.DENSITY * planet.radius**3
             planet.redraw()
 
 
-def ButtonPress3(event):
+def button_press3(_):
     global bp3flag
     bp3flag = True
 
 
-def ButtonRelease3(event):
+def button_release3(_):
     global bp3flag
     bp3flag = False
 
 
-def ButtonPress2(event):
+def button_press2(_):
     global coordinate_difference
     if pressed_planet:
         coordinate_difference = numpy.zeros(2)
 
 
-if EDGE_MODE == "reflect":
+if config.EDGE_MODE == "reflect":
 
     def create_universe() -> list:
         planets_ = []
-        for _ in range(INITIAL_PLANETS):
+        for _ in range(config.INITIAL_PLANETS):
             flag = True
             while flag:
-                radius = numpy.random.uniform(RADIUS_RANGE[0], RADIUS_RANGE[1]) * SCALE
+                radius = (
+                    numpy.random.uniform(config.RADIUS_RANGE[0], config.RADIUS_RANGE[1])
+                    * config.SCALE
+                )
                 coordinate = numpy.random.uniform(high=2, size=2) * (CENTER - radius)
                 for planet in planets_:
                     if planet.radius + radius >= numpy.linalg.norm(
@@ -271,13 +286,15 @@ if EDGE_MODE == "reflect":
             planets_.append(
                 Planet(
                     coordinate,
-                    numpy.random.uniform(high=INITIAL_SPEED_CONSTANT * SCALE, size=2),
-                    mass=4 / 3 * numpy.pi * DENSITY * radius ** 3,
+                    numpy.random.uniform(
+                        high=config.INITIAL_SPEED_CONSTANT * config.SCALE, size=2
+                    ),
+                    mass=4 / 3 * numpy.pi * config.DENSITY * radius**3,
                     radius=radius,
-                    ID=canvas.create_oval(
+                    planet_id=canvas.create_oval(
                         tuple(
                             numpy.hstack((coordinate - radius, coordinate + radius))
-                            / SCALE
+                            / config.SCALE
                         ),
                         fill=rgb_color(PLANET_COLOR.astype(int)),
                     ),
@@ -312,20 +329,22 @@ if EDGE_MODE == "reflect":
                 coordinate_difference += change
             planet.coordinate += change
 
-
-elif EDGE_MODE == "respawn":
+elif config.EDGE_MODE == "respawn":
 
     def create_universe() -> list[Planet]:
         planets_ = []
-        for _ in range(INITIAL_PLANETS):
+        for _ in range(config.INITIAL_PLANETS):
             flag = True
             while flag:
-                r = numpy.random.uniform(high=numpy.linalg.norm(CENTER))
+                array = numpy.random.uniform(high=numpy.linalg.norm(CENTER))
                 theta = numpy.random.uniform(high=2 * numpy.pi)
-                coordinate = r * (
+                coordinate = array * (
                     numpy.array(numpy.cos(theta), numpy.sin(theta)) + CENTER
                 )
-                radius = numpy.random.uniform(RADIUS_RANGE[0], RADIUS_RANGE[1]) * SCALE
+                radius = (
+                    numpy.random.uniform(config.RADIUS_RANGE[0], config.RADIUS_RANGE[1])
+                    * config.SCALE
+                )
                 for planet in planets_:
                     if planet.radius + radius < numpy.linalg.norm(
                         planet.coordinate - coordinate
@@ -336,13 +355,15 @@ elif EDGE_MODE == "respawn":
             planets_.append(
                 Planet(
                     coordinate,
-                    numpy.random.uniform(high=INITIAL_SPEED_CONSTANT * SCALE, size=2),
-                    mass=4 / 3 * numpy.pi * DENSITY * radius ** 3,
+                    numpy.random.uniform(
+                        high=config.INITIAL_SPEED_CONSTANT * config.SCALE, size=2
+                    ),
+                    mass=4 / 3 * numpy.pi * config.DENSITY * radius**3,
                     radius=radius,
-                    ID=canvas.create_oval(
+                    planet_id=canvas.create_oval(
                         tuple(
                             numpy.hstack((coordinate - radius, coordinate + radius))
-                            / SCALE
+                            / config.SCALE
                         ),
                         fill=rgb_color(PLANET_COLOR.astype(int)),
                     ),
@@ -359,13 +380,13 @@ tk.title("Gravity Simulator - Emre Geçit")
 tk.attributes("-fullscreen", True)
 canvas = Canvas(tk, width=SCREENWIDTH, height=SCREENHEIGHT)
 planets = create_universe()
-canvas.configure(bg=rgb_color(BG_COLOR))
+canvas.configure(bg=rgb_color(config.BG_COLOR))
 canvas.bind("<ButtonPress-1>", ButtonPress1)
 canvas.bind("<ButtonRelease-1>", ButtonRelease1)
 canvas.bind("<MouseWheel>", MouseWheel)
-canvas.bind("<ButtonPress-3>", ButtonPress3)
-canvas.bind("<ButtonRelease-3>", ButtonRelease3)
-canvas.bind("<ButtonPress-2>", ButtonPress2)
+canvas.bind("<ButtonPress-3>", button_press3)
+canvas.bind("<ButtonRelease-3>", button_release3)
+canvas.bind("<ButtonPress-2>", button_press2)
 canvas.pack()
-canvas.after(DELAY, callback)
+canvas.after(config.DELAY, callback)
 tk.mainloop()
