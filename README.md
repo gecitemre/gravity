@@ -2,11 +2,12 @@
 
 # Gravity Simulator
 
-https://youtu.be/aWpOb90gNvY
-https://github.com/gecitemre/web-gravity
-
 Simulates the interaction of round entities on a 2D plane, implementing collision and gravitational
-physics. NumPy is used extensively for vector and math calculations and Tkinter is used for the GUI.
+physics. NumPy is used for vector and math calculations, Tkinter is used for the GUI.
+
+Chech out the ![Youtube Demo](https://youtu.be/aWpOb90gNvY)!
+
+Also, there is a web version of this project. You can try the![Web version](https://github.com/gecitemre/web-gravity), or view the source code of the web version at [https://github.com/gecitemre/web-gravity](https://gecitemre.github.io/web-gravity/)
 
 ## Usage
 To run the simulator, run gravity.py with python.
